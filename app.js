@@ -1,6 +1,6 @@
 const { useState, useEffect, useMemo, useRef } = React;
 
-// التوابع الأساسية
+// ============== LocalStorage Helper ==============
 const ls = {
     get: (key, defaultValue) => {
         try {
@@ -16,20 +16,16 @@ const ls = {
 const uid = () => Math.random().toString(36).substring(2, 10);
 const formatPrice = (price) => price.toLocaleString('ar-SY') + " ل.س";
 
-// إعدادات البوت - غيّر هذه القيم حسب بوتك
-const BOT_TOKEN = "8727549999:AAEPGB7tvc7HYf2OViD34HanwJBSc3jkOEU"; // ضع توكن البوت هنا
-const BOT_USERNAME = "@idlebstore_bot"; // مثال: @MyShopBot
-
-// البيانات الافتراضية
+// ============== Default Data ==============
 const defaultSettings = {
-    whatsappNumber: "963900000000",
+    whatsappNumber: "963969061988",
     shopName: "IDLEB X",
-    adminPwd: "idlebx-admin",
+    adminPwd: "sham20066shamgmail.com",
     discountCode: "CYBER10",
     discountPercent: 10,
-    botToken: BOT_TOKEN,
-    botUsername: BOT_USERNAME,
-    enableBot: true  // تفعيل البوت
+    botToken: "",
+    botUsername: "",
+    enableBot: false
 };
 
 const defaultCategories = [
@@ -41,75 +37,15 @@ const defaultCategories = [
 ];
 
 const defaultProducts = [
-    { id: "p1", categoryId: "cat1", name: "Kali Linux Pro Kit", priceSYP: 450000, description: "نسخة مخصصة من كالي مع 200+ أداة", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400", downloadLink: "https://t.me/your_channel/kali_pro_kit", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, views: 1243 },
-    { id: "p2", categoryId: "cat1", name: "Burp Suite Pro License", priceSYP: 1250000, description: "رخصة سنة كاملة", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400", downloadLink: "https://t.me/your_channel/burp_pro", createdAt: Date.now(), stock: 25, isDigital: true, rating: 5.0, views: 892 },
-    { id: "p3", categoryId: "cat2", name: "حزمة OSINT Master", priceSYP: 320000, description: "50 أداة OSINT", image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400", downloadLink: "https://t.me/your_channel/osint_master", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.7, views: 756 },
-    { id: "p4", categoryId: "cat3", name: "VPN Lifetime", priceSYP: 850000, description: "اشتراك مدى الحياة", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400", downloadLink: "https://t.me/your_channel/vpn_lifetime", createdAt: Date.now(), stock: 100, isDigital: true, rating: 4.8, views: 2104 },
-    { id: "p5", categoryId: "cat4", name: "دورة اختراق أخلاقي", priceSYP: 680000, description: "35 ساعة فيديو", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400", downloadLink: "https://t.me/your_channel/hacking_course", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, views: 3421 },
-    { id: "p6", categoryId: "cat5", name: "Flipper Zero", priceSYP: 2750000, description: "جهاز Flipper Zero", image: "https://images.unsplash.com/photo-1597225244661-8cfb5ddb0f8e?w=400", downloadLink: "", createdAt: Date.now(), stock: 7, isDigital: false, rating: 5.0, views: 5432 }
+    { id: "p1", categoryId: "cat1", name: "Kali Linux Pro Kit", priceSYP: 450000, description: "نسخة مخصصة من كالي مع 200+ أداة", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, views: 1243 },
+    { id: "p2", categoryId: "cat1", name: "Burp Suite Pro License", priceSYP: 1250000, description: "رخصة سنة كاملة لأقوى أداة فحص ثغرات", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400", downloadLink: "", createdAt: Date.now(), stock: 25, isDigital: true, rating: 5.0, views: 892 },
+    { id: "p3", categoryId: "cat2", name: "حزمة OSINT Master", priceSYP: 320000, description: "50 أداة OSINT + قوائم dorks", image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.7, views: 756 },
+    { id: "p4", categoryId: "cat3", name: "VPN Lifetime", priceSYP: 850000, description: "اشتراك مدى الحياة - 15 دولة", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400", downloadLink: "", createdAt: Date.now(), stock: 100, isDigital: true, rating: 4.8, views: 2104 },
+    { id: "p5", categoryId: "cat4", name: "دورة اختراق أخلاقي كاملة", priceSYP: 680000, description: "35 ساعة فيديو بالعربي", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, views: 3421 },
+    { id: "p6", categoryId: "cat5", name: "Flipper Zero + إكسسوارات", priceSYP: 2750000, description: "جهاز Flipper Zero أصلي", image: "https://images.unsplash.com/photo-1597225244661-8cfb5ddb0f8e?w=400", downloadLink: "", createdAt: Date.now(), stock: 7, isDigital: false, rating: 5.0, views: 5432 }
 ];
 
-// دالة إرسال الطلب إلى البوت
-const sendToBot = async (userId, product, amount) => {
-    const settings = ls.get("idlebx:settings", defaultSettings);
-    if (!settings.enableBot || !settings.botToken) {
-        return { success: false, error: "البوت غير مفعل" };
-    }
-    
-    // تخزين طلب الشراء مؤقتاً
-    const pendingPurchases = ls.get("idlebx:pending", []);
-    const purchaseId = uid();
-    const newPurchase = {
-        id: purchaseId,
-        userId: userId,
-        productId: product.id,
-        productName: product.name,
-        amount: amount,
-        status: "pending",
-        createdAt: Date.now(),
-        downloadLink: product.downloadLink
-    };
-    pendingPurchases.push(newPurchase);
-    ls.set("idlebx:pending", pendingPurchases);
-    
-    // محاولة إرسال إشعار للبوت (يتم التعامل معه من طرف البوت)
-    try {
-        const response = await fetch(`https://api.telegram.org/bot${settings.botToken}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                chat_id: userId,
-                text: `🛍️ طلب شراء جديد!\n\n📦 المنتج: ${product.name}\n💰 السعر: ${formatPrice(amount)}\n🆔 رقم الطلب: ${purchaseId}\n\n⚠️ يرجى إرسال /confirm_${purchaseId} بعد تأكيد الدفع.\n\nلإلغاء الطلب: /cancel_${purchaseId}`,
-                parse_mode: "HTML"
-            })
-        });
-        const data = await response.json();
-        return { success: true, purchaseId: purchaseId, botResponse: data };
-    } catch (error) {
-        console.error("خطأ في إرسال الطلب للبوت:", error);
-        return { success: false, error: error.message };
-    }
-};
-
-// دالة التحقق من حالة الشراء
-const checkPurchaseStatus = (purchaseId) => {
-    const pending = ls.get("idlebx:pending", []);
-    const purchase = pending.find(p => p.id === purchaseId);
-    if (purchase && purchase.status === "completed") {
-        // حذف الطلب بعد اكتماله
-        const updated = pending.filter(p => p.id !== purchaseId);
-        ls.set("idlebx:pending", updated);
-        return { completed: true, downloadLink: purchase.downloadLink };
-    }
-    if (purchase && purchase.status === "cancelled") {
-        const updated = pending.filter(p => p.id !== purchaseId);
-        ls.set("idlebx:pending", updated);
-        return { completed: false, cancelled: true };
-    }
-    return { completed: false, pending: true };
-};
-
-// المكون الرئيسي
+// ============== Main App Component ==============
 function App() {
     const [settings, setSettings] = useState(() => ls.get("idlebx:settings", defaultSettings));
     const [categories, setCategories] = useState(() => ls.get("idlebx:categories", defaultCategories));
@@ -129,7 +65,7 @@ function App() {
     const [userId, setUserId] = useState(() => ls.get("idlebx:user_id", ""));
     const [showUserIdModal, setShowUserIdModal] = useState(false);
     
-    // نماذج الإدارة
+    // Admin form states
     const [newCatName, setNewCatName] = useState("");
     const [newCatDesc, setNewCatDesc] = useState("");
     const [newCatImg, setNewCatImg] = useState("");
@@ -147,9 +83,8 @@ function App() {
     const userIdRef = useRef(null);
     const clickCount = useRef(0);
     const clickTimer = useRef(null);
-    const checkInterval = useRef(null);
 
-    // حفظ البيانات
+    // Save data
     useEffect(() => { ls.set("idlebx:settings", settings); }, [settings]);
     useEffect(() => { ls.set("idlebx:categories", categories); }, [categories]);
     useEffect(() => { ls.set("idlebx:products", products); }, [products]);
@@ -158,7 +93,7 @@ function App() {
     useEffect(() => { ls.set("idlebx:auth", isAuth); }, [isAuth]);
     useEffect(() => { if (userId) ls.set("idlebx:user_id", userId); }, [userId]);
 
-    // تصفية المنتجات
+    // Filter products
     const filteredProducts = useMemo(() => {
         let list = [...products];
         if (activeCat !== "all") list = list.filter(p => p.categoryId === activeCat);
@@ -183,7 +118,7 @@ function App() {
     const discount = discountCode.toUpperCase() === settings.discountCode.toUpperCase() ? settings.discountPercent : 0;
     const finalTotal = cartTotal * (1 - discount / 100);
 
-    // دوال السلة
+    // Cart functions
     const addToCart = (productId) => {
         setCart(prev => {
             const existing = prev.find(i => i.id === productId);
@@ -206,7 +141,7 @@ function App() {
         setProducts(prev => prev.map(p => p.id === id ? { ...p, views: p.views + 1 } : p));
     };
 
-    // دالة الشراء عبر البوت
+    // Purchase via Bot
     const purchaseViaBot = async (product) => {
         if (!userId) {
             setShowUserIdModal(true);
@@ -215,51 +150,35 @@ function App() {
         
         setPurchaseStatus({ loading: true, product: product.name });
         
-        const result = await sendToBot(userId, product, product.priceSYP);
-        
-        if (result.success) {
-            setPurchaseStatus({
-                success: true,
-                message: `✅ تم إرسال طلب شراء ${product.name} إلى البوت!\nرقم الطلب: ${result.purchaseId}\nالرجاء مراجعة البوت لإتمام الدفع.`,
-                purchaseId: result.purchaseId
+        try {
+            const response = await fetch(`https://api.telegram.org/bot${settings.botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: userId,
+                    text: `🛍️ طلب شراء جديد!\n\n📦 المنتج: ${product.name}\n💰 السعر: ${formatPrice(product.priceSYP)}\n🔗 رابط المنتج: ${product.downloadLink || "لا يوجد رابط تلقائي"}\n\nلإتمام الشراء، يرجى إرسال المبلغ إلى المحفظة التالية: [رقم المحفظة]`,
+                    parse_mode: "HTML"
+                })
             });
             
-            // بدء التحقق من حالة الدفع
-            checkInterval.current = setInterval(() => {
-                const status = checkPurchaseStatus(result.purchaseId);
-                if (status.completed && status.downloadLink) {
-                    clearInterval(checkInterval.current);
-                    setPurchaseStatus({
-                        success: true,
-                        completed: true,
-                        message: `🎉 تم تأكيد الدفع! يمكنك الآن تحميل المنتج: ${product.name}`,
-                        downloadLink: status.downloadLink
-                    });
-                } else if (status.cancelled) {
-                    clearInterval(checkInterval.current);
-                    setPurchaseStatus({
-                        error: true,
-                        message: `❌ تم إلغاء طلب شراء ${product.name}`
-                    });
-                }
-            }, 5000); // التحقق كل 5 ثواني
+            const data = await response.json();
             
-            setTimeout(() => {
-                if (checkInterval.current) clearInterval(checkInterval.current);
-            }, 300000); // إيقاف التحقق بعد 5 دقائق
-        } else {
-            setPurchaseStatus({
-                error: true,
-                message: `❌ فشل إرسال الطلب: ${result.error}\nالرجاء المحاولة مرة أخرى أو التواصل مع الدعم.`
-            });
+            if (data.ok) {
+                setPurchaseStatus({
+                    success: true,
+                    message: `✅ تم إرسال طلب شراء ${product.name} إلى البوت!\nالرجاء مراجعة البوت لإتمام الدفع.`
+                });
+            } else {
+                setPurchaseStatus({ error: true, message: "❌ فشل إرسال الطلب. تأكد من توكن البوت." });
+            }
+        } catch (error) {
+            setPurchaseStatus({ error: true, message: `❌ خطأ: ${error.message}` });
         }
         
-        setTimeout(() => {
-            setPurchaseStatus(null);
-        }, 15000);
+        setTimeout(() => setPurchaseStatus(null), 10000);
     };
 
-    // دوال الإدارة
+    // Admin functions
     const addCategory = () => {
         if (!newCatName.trim()) return alert("أدخل اسم القسم");
         const newCat = {
@@ -311,12 +230,8 @@ function App() {
         setProducts(products.filter(p => p.id !== id));
         setCart(cart.filter(i => i.id !== id));
     };
-    
-    const updateProductLink = (id, link) => {
-        setProducts(products.map(p => p.id === id ? { ...p, downloadLink: link } : p));
-    };
 
-    // فتح لوحة التحكم
+    // Admin panel access
     const logoSecret = () => {
         clickCount.current++;
         if (clickTimer.current) clearTimeout(clickTimer.current);
@@ -349,7 +264,7 @@ function App() {
         setIsAuth(false);
         setAdminOpen(false);
     };
-
+    
     const saveUserId = () => {
         const id = userIdRef.current?.value || "";
         if (id) {
@@ -361,30 +276,25 @@ function App() {
         }
     };
 
-    // روابط واتساب (للاحتياط)
+    // WhatsApp link (fallback)
     const getWhatsAppLink = (product) => {
         const cat = categories.find(c => c.id === product.categoryId);
-        const msg = `مرحباً ${settings.shopName} 👋
-
-أرغب بشراء المنتج التالي:
-
-📦 *${product.name}*
-🏷️ القسم: ${cat?.name || ''}
-💰 السعر: ${formatPrice(product.priceSYP)}
-${product.isDigital ? '⚡ تسليم فوري رقمي' : '📦 منتج فيزيائي'}
-⭐ التقييم: ${product.rating}/5
-
-📝 الوصف:
-${product.description}
-
-الرجاء تزويدي بطريقة الدفع والاستلام.`;
+        const msg = `مرحباً ${settings.shopName} 👋\n\nأرغب بشراء المنتج التالي:\n\n📦 *${product.name}*\n🏷️ القسم: ${cat?.name || ''}\n💰 السعر: ${formatPrice(product.priceSYP)}\n${product.isDigital ? '⚡ تسليم فوري رقمي' : '📦 منتج فيزيائي'}\n⭐ التقييم: ${product.rating}/5\n\n📝 الوصف:\n${product.description}\n\nالرجاء تزويدي بطريقة الدفع والاستلام.`;
         return `https://wa.me/${settings.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`;
     };
 
-    // JSX
+    const getCartWhatsAppLink = () => {
+        const items = cart.map(item => {
+            const p = products.find(x => x.id === item.id);
+            return `• ${p.name} ×${item.qty} = ${formatPrice(p.priceSYP * item.qty)}`;
+        }).join('\n');
+        const msg = `مرحباً ${settings.shopName} 👋\n\nأرغب بطلب المنتجات التالية:\n\n${items}\n\n💰 المجموع: ${formatPrice(cartTotal)}\n${discount > 0 ? `🎉 خصم ${settings.discountCode} (${discount}%): -${formatPrice(cartTotal - finalTotal)}\n💵 المبلغ النهائي: ${formatPrice(finalTotal)}` : ''}\n\nعدد المنتجات: ${cart.reduce((s, i) => s + i.qty, 0)}\n\nالرجاء تأكيد الطلب وطريقة الدفع.`;
+        return `https://wa.me/${settings.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`;
+    };
+
     return (
         <div>
-            {/* مودال إدخال معرف التليجرام */}
+            {/* User ID Modal */}
             {showUserIdModal && (
                 <div className="admin-panel" style={{ zIndex: 3000 }}>
                     <div className="admin-container" style={{ maxWidth: '400px' }}>
@@ -402,7 +312,7 @@ ${product.description}
                                 style={{ width: '100%', marginBottom: '20px' }}
                             />
                             <p style={{ fontSize: '12px', color: '#888', marginBottom: '20px' }}>
-                                💡 يمكنك الحصول على معرفك من إعدادات التليجرام أو عن طريق مراسلة @userinfobot
+                                💡 يمكنك الحصول على معرفك من @userinfobot في التليجرام
                             </p>
                             <button className="btn-primary" onClick={saveUserId}>تأكيد</button>
                         </div>
@@ -410,58 +320,40 @@ ${product.description}
                 </div>
             )}
 
-            {/* رسالة حالة الشراء */}
+            {/* Purchase Status Modal */}
             {purchaseStatus && (
                 <div className="admin-panel" style={{ zIndex: 3000 }}>
                     <div className="admin-container" style={{ maxWidth: '450px' }}>
                         <div className="admin-header">
-                            <h3>{purchaseStatus.success ? '✅ شراء ناجح' : (purchaseStatus.error ? '❌ فشل الشراء' : '⏳ جاري المعالجة')}</h3>
+                            <h3>{purchaseStatus.success ? '✅ تم الإرسال' : (purchaseStatus.error ? '❌ فشل' : '⏳ جاري المعالجة')}</h3>
                             <button className="login-btn" onClick={() => setPurchaseStatus(null)}>✕</button>
                         </div>
                         <div style={{ padding: '20px', textAlign: 'center' }}>
                             <p style={{ whiteSpace: 'pre-line' }}>{purchaseStatus.message}</p>
-                            {purchaseStatus.completed && purchaseStatus.downloadLink && (
-                                <a href={purchaseStatus.downloadLink} target="_blank" className="btn-primary" style={{ marginTop: '20px', display: 'inline-block' }}>
-                                    📥 تحميل المنتج
-                                </a>
-                            )}
-                            {purchaseStatus.loading && (
-                                <div style={{ marginTop: '20px' }}>
-                                    <div className="loading-spinner"></div>
-                                    <p style={{ fontSize: '12px', color: '#888', marginTop: '10px' }}>جاري انتظار تأكيد الدفع...</p>
-                                </div>
-                            )}
+                            {purchaseStatus.loading && <div className="loading-spinner" style={{ marginTop: '20px' }}></div>}
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* الهيدر - نفس السابق */}
+            {/* Header */}
             <header className="header">
                 <div className="container">
                     <div className="header-content">
                         <div className="logo" onClick={logoSecret}>
                             <div className="logo-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"/>
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                                 </svg>
                             </div>
                             <div>
-                                <div className="logo-text">
-                                    <span>IDLEB</span><span>X</span>
-                                </div>
+                                <div className="logo-text"><span>IDLEB</span><span>X</span></div>
                                 <div className="logo-badge">CYBER ARSENAL</div>
                             </div>
                         </div>
                         
                         <div className={`search-area ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-                            <input
-                                type="text"
-                                className="search-input"
-                                placeholder="ابحث في المنتجات..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
+                            <input type="text" className="search-input" placeholder="ابحث في المنتجات..." value={search} onChange={(e) => setSearch(e.target.value)} />
                             <select className="sort-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                                 <option value="new">الأحدث</option>
                                 <option value="popular">الأكثر مشاهدة</option>
@@ -484,16 +376,14 @@ ${product.description}
                                 {cart.length > 0 && <span className="cart-count">{cart.reduce((s, i) => s + i.qty, 0)}</span>}
                             </button>
                             <button className="menu-button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                                    <path d="M4 6h16M4 12h16M4 18h16"/>
-                                </svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                             </button>
                         </div>
                     </div>
                 </div>
             </header>
 
-            {/* الهيرو */}
+            {/* Hero Section */}
             <div className="container">
                 <div className="hero">
                     <h1>ترسانة الهاكر الأخلاقي <span>بين يديك</span></h1>
@@ -501,39 +391,28 @@ ${product.description}
                     <a href="#products" className="btn-primary">تصفح الأدوات</a>
                 </div>
 
-                {/* الأقسام */}
-                <h2 className="section-title">
-                    الأقسام
-                    <span style={{ fontSize: '12px', color: '#71717a' }}>{categories.length} أقسام</span>
-                </h2>
+                {/* Categories */}
+                <h2 className="section-title">الأقسام <span style={{ fontSize: '12px', color: '#71717a' }}>{categories.length} أقسام</span></h2>
                 <div className="categories-grid">
                     <div className={`category-card ${activeCat === 'all' ? 'active' : ''}`} onClick={() => setActiveCat('all')}>
-                        <div className="category-card-content">
-                            <h3>✨ الكل</h3>
-                            <p>جميع المنتجات</p>
-                        </div>
+                        <div className="category-card-content"><h3>✨ الكل</h3><p>جميع المنتجات</p></div>
                     </div>
                     {categoriesSorted.map(cat => (
                         <div key={cat.id} className={`category-card ${activeCat === cat.id ? 'active' : ''}`} onClick={() => setActiveCat(cat.id)}>
                             <img src={cat.image} alt={cat.name} />
-                            <div className="category-card-content">
-                                <h3>{cat.name}</h3>
-                                <p>{cat.description}</p>
-                            </div>
+                            <div className="category-card-content"><h3>{cat.name}</h3><p>{cat.description}</p></div>
                         </div>
                     ))}
                 </div>
 
-                {/* المنتجات */}
+                {/* Products */}
                 <h2 className="section-title" id="products">
                     {activeCat === 'all' ? 'جميع المنتجات' : categories.find(c => c.id === activeCat)?.name}
                     <span style={{ fontSize: '12px', color: '#71717a' }}>{filteredProducts.length} منتج</span>
                 </h2>
                 
                 {filteredProducts.length === 0 ? (
-                    <div className="empty-state">
-                        <p>لا توجد منتجات مطابقة للبحث</p>
-                    </div>
+                    <div className="empty-state"><p>لا توجد منتجات مطابقة للبحث</p></div>
                 ) : (
                     <div className="products-grid">
                         {filteredProducts.map(product => {
@@ -561,7 +440,7 @@ ${product.description}
                                         <div className="product-category">{cat?.name}</div>
                                         <div className="product-price">{formatPrice(product.priceSYP)}</div>
                                         <div className="product-actions">
-                                            {settings.enableBot && product.isDigital ? (
+                                            {settings.enableBot && settings.botToken && product.isDigital ? (
                                                 <button className="btn-buy" onClick={() => purchaseViaBot(product)} style={{ background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                                                     🤖 شراء عبر البوت
                                                 </button>
@@ -570,9 +449,7 @@ ${product.description}
                                                     📞 طلب عبر واتساب
                                                 </a>
                                             )}
-                                            <button className="btn-cart" onClick={() => addToCart(product.id)}>
-                                                🛒
-                                            </button>
+                                            <button className="btn-cart" onClick={() => addToCart(product.id)}>🛒</button>
                                         </div>
                                     </div>
                                 </div>
@@ -582,18 +459,13 @@ ${product.description}
                 )}
             </div>
 
-            {/* سلة التسوق - نفس السابق */}
+            {/* Cart Sidebar */}
             <div className={`cart-overlay ${cartOpen ? 'open' : ''}`} onClick={() => setCartOpen(false)}></div>
             <div className={`cart-sidebar ${cartOpen ? 'open' : ''}`}>
-                <div className="cart-header">
-                    <h3>🛒 سلة التسوق</h3>
-                    <button className="close-cart" onClick={() => setCartOpen(false)}>✕</button>
-                </div>
+                <div className="cart-header"><h3>🛒 سلة التسوق</h3><button className="close-cart" onClick={() => setCartOpen(false)}>✕</button></div>
                 <div className="cart-items">
                     {cart.length === 0 ? (
-                        <div className="empty-state" style={{ padding: '40px' }}>
-                            <p>السلة فارغة</p>
-                        </div>
+                        <div className="empty-state" style={{ padding: '40px' }}><p>السلة فارغة</p></div>
                     ) : (
                         cart.map(item => {
                             const p = products.find(x => x.id === item.id);
@@ -630,15 +502,13 @@ ${product.description}
                             {discount > 0 && <div className="total-row"><span>الخصم ({discount}%)</span><span>-{formatPrice(cartTotal - finalTotal)}</span></div>}
                             <div className="total-row grand-total"><span>الإجمالي</span><span>{formatPrice(finalTotal)}</span></div>
                         </div>
-                        <a href={getWhatsAppLink({ name: "الطلب الكامل", priceSYP: finalTotal, description: cart.map(i => `${i.qty}x ${products.find(p=>p.id===i.id)?.name}`).join(', ') })} target="_blank" className="whatsapp-checkout">
-                            📱 إتمام الطلب عبر واتساب
-                        </a>
+                        <a href={getCartWhatsAppLink()} target="_blank" className="whatsapp-checkout">📱 إتمام الطلب عبر واتساب</a>
                         <button className="clear-cart" onClick={() => setCart([])}>تفريغ السلة</button>
                     </div>
                 )}
             </div>
 
-            {/* لوحة التحكم - نفس السابق مع إضافة إعدادات البوت */}
+            {/* Admin Panel */}
             {adminOpen && (
                 <div className="admin-panel">
                     <div className="admin-container">
@@ -733,13 +603,8 @@ ${product.description}
                                             <h4 style={{ marginBottom: '15px' }}>📁 الأقسام الحالية ({categories.length})</h4>
                                             {categories.map(c => (
                                                 <div key={c.id} className="list-item">
-                                                    <div className="list-item-info">
-                                                        <h4>{c.name}</h4>
-                                                        <p>{c.description}</p>
-                                                    </div>
-                                                    <div className="list-item-actions">
-                                                        <button className="delete-btn" onClick={() => deleteCategory(c.id)}>حذف</button>
-                                                    </div>
+                                                    <div className="list-item-info"><h4>{c.name}</h4><p>{c.description}</p></div>
+                                                    <div className="list-item-actions"><button className="delete-btn" onClick={() => deleteCategory(c.id)}>حذف</button></div>
                                                 </div>
                                             ))}
                                         </div>
@@ -781,46 +646,13 @@ ${product.description}
                                                 <label><input type="checkbox" checked={settings.enableBot} onChange={(e) => setSettings({ ...settings, enableBot: e.target.checked })} /> تفعيل البوت</label>
                                             </div>
                                         </div>
-                                        
                                         <div className="info-box">
                                             <strong>📖 شرح إعداد البوت:</strong><br/><br/>
                                             1️⃣ اذهب إلى <strong>@BotFather</strong> في التليجرام<br/>
                                             2️⃣ أرسل <code>/newbot</code> لإنشاء بوت جديد<br/>
                                             3️⃣ اختر اسم للبوت ثم اسم مستخدم ينتهي بـ <strong>bot</strong><br/>
-                                            4️⃣ بعد الإنشاء، ستحصل على <strong>Token</strong> - انسخه والصقه في الحقل أعلاه<br/><br/>
-                                            <strong>⚠️ ملاحظة:</strong> البوت يحتاج إلى برنامج منفصل يعمل على خادم (Node.js/Python) لمعالجة الدفعات والرصيد. هذا المتجر يرسل الطلبات فقط، وعملية الخصم والتسليم تحتاج إلى بوت منفصل.
-                                        </div>
-                                        
-                                        <div className="admin-form" style={{ marginTop: '20px' }}>
-                                            <h4 style={{ marginBottom: '15px' }}>📦 طلبات الشراء المعلقة</h4>
-                                            <div className="items-list">
-                                                {ls.get("idlebx:pending", []).filter(p => p.status === "pending").map(p => (
-                                                    <div key={p.id} className="list-item">
-                                                        <div className="list-item-info">
-                                                            <h4>{p.productName}</h4>
-                                                            <p>المستخدم: {p.userId} • المبلغ: {formatPrice(p.amount)}</p>
-                                                            <p style={{ fontSize: '11px' }}>رقم الطلب: {p.id}</p>
-                                                        </div>
-                                                        <div className="list-item-actions">
-                                                            <button className="edit-btn" style={{ background: '#10b981', color: 'black' }} onClick={() => {
-                                                                const updated = ls.get("idlebx:pending", []).map(pp => pp.id === p.id ? { ...pp, status: "completed" } : pp);
-                                                                ls.set("idlebx:pending", updated);
-                                                                alert(`تم تأكيد طلب ${p.productName}`);
-                                                                window.location.reload();
-                                                            }}>تأكيد الدفع</button>
-                                                            <button className="delete-btn" onClick={() => {
-                                                                const updated = ls.get("idlebx:pending", []).map(pp => pp.id === p.id ? { ...pp, status: "cancelled" } : pp);
-                                                                ls.set("idlebx:pending", updated);
-                                                                alert(`تم إلغاء طلب ${p.productName}`);
-                                                                window.location.reload();
-                                                            }}>إلغاء</button>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                                {ls.get("idlebx:pending", []).filter(p => p.status === "pending").length === 0 && (
-                                                    <p className="empty-state" style={{ padding: '20px' }}>لا توجد طلبات معلقة</p>
-                                                )}
-                                            </div>
+                                            4️⃣ بعد الإنشاء، ستحصل على <strong>Token</strong> - انسخه والصقه في الحقل أعلاه<br/>
+                                            5️⃣ ارفع ملف bot.js على Render كما هو موضح
                                         </div>
                                     </div>
                                 )}
@@ -830,32 +662,15 @@ ${product.description}
                 </div>
             )}
 
-            {/* الفوتر */}
+            {/* Footer */}
             <footer className="footer">
                 <div className="container">
                     <p>IDLEB X - متجر متخصص في أدوات السايبر سكيورتي والاختراق الأخلاقي</p>
                     <p style={{ marginTop: '10px' }}>جميع المنتجات للاستخدام التعليمي والقانوني فقط © {new Date().getFullYear()}</p>
                 </div>
             </footer>
-            
-            <style>{`
-                .loading-spinner {
-                    width: 40px;
-                    height: 40px;
-                    border: 3px solid #27272a;
-                    border-top: 3px solid #10b981;
-                    border-radius: 50%;
-                    animation: spin 1s linear infinite;
-                    margin: 0 auto;
-                }
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            `}</style>
         </div>
     );
 }
 
-// تشغيل التطبيق
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
