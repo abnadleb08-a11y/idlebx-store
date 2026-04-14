@@ -23,8 +23,8 @@ const defaultSettings = {
     adminPwd: "sham20066shamgmail.com",
     discountCode: "CYBER10",
     discountPercent: 10,
-    botToken: "",
-    botUsername: "",
+    botToken: "8727549999:AAEPGB7tvc7HYf2OViD34HanwJBSc3jkOEU",
+    botUsername: "@idlebstore_bot",
     enableBot: false
 };
 
