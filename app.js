@@ -18,14 +18,20 @@ const formatPrice = (price) => price.toLocaleString('ar-SY') + " ل.س";
 
 // ============== Default Data ==============
 const defaultSettings = {
-    whatsappNumber: "963969061988",
+    whatsappNumber: "963900000000",
     shopName: "IDLEB X",
-    adminPwd: "sham20066shamgmail.com",
+    adminPwd: "idlebx-admin",
     discountCode: "CYBER10",
     discountPercent: 10,
-    botToken: "8727549999:AAEPGB7tvc7HYf2OViD34HanwJBSc3jkOEU",
-    botUsername: "@idlebstore_bot",
-    enableBot: false
+    botToken: "",
+    botUsername: "idlebstore_bot",
+    enableBot: true,
+    shippingFee: 5000,
+    freeShippingMin: 200000,
+    currency: "SYP",
+    darkMode: false,
+    referralBonus: 5000,
+    referralPercent: 5
 };
 
 const defaultCategories = [
@@ -37,13 +43,23 @@ const defaultCategories = [
 ];
 
 const defaultProducts = [
-    { id: "p1", categoryId: "cat1", name: "Kali Linux Pro Kit", priceSYP: 450000, description: "نسخة مخصصة من كالي مع 200+ أداة", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, views: 1243 },
-    { id: "p2", categoryId: "cat1", name: "Burp Suite Pro License", priceSYP: 1250000, description: "رخصة سنة كاملة لأقوى أداة فحص ثغرات", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400", downloadLink: "", createdAt: Date.now(), stock: 25, isDigital: true, rating: 5.0, views: 892 },
-    { id: "p3", categoryId: "cat2", name: "حزمة OSINT Master", priceSYP: 320000, description: "50 أداة OSINT + قوائم dorks", image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.7, views: 756 },
-    { id: "p4", categoryId: "cat3", name: "VPN Lifetime", priceSYP: 850000, description: "اشتراك مدى الحياة - 15 دولة", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400", downloadLink: "", createdAt: Date.now(), stock: 100, isDigital: true, rating: 4.8, views: 2104 },
-    { id: "p5", categoryId: "cat4", name: "دورة اختراق أخلاقي كاملة", priceSYP: 680000, description: "35 ساعة فيديو بالعربي", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, views: 3421 },
-    { id: "p6", categoryId: "cat5", name: "Flipper Zero + إكسسوارات", priceSYP: 2750000, description: "جهاز Flipper Zero أصلي", image: "https://images.unsplash.com/photo-1597225244661-8cfb5ddb0f8e?w=400", downloadLink: "", createdAt: Date.now(), stock: 7, isDigital: false, rating: 5.0, views: 5432 }
+    { id: "p1", categoryId: "cat1", name: "Kali Linux Pro Kit", priceSYP: 450000, oldPrice: 550000, description: "نسخة مخصصة من كالي مع 200+ أداة ودورة فيديو", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, ratingCount: 128, views: 1243, sales: 89 },
+    { id: "p2", categoryId: "cat1", name: "Burp Suite Pro License", priceSYP: 1250000, oldPrice: 1500000, description: "رخصة سنة كاملة لأقوى أداة فحص ثغرات", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400", downloadLink: "", createdAt: Date.now(), stock: 25, isDigital: true, rating: 5.0, ratingCount: 45, views: 892, sales: 12 },
+    { id: "p3", categoryId: "cat2", name: "حزمة OSINT Master", priceSYP: 320000, oldPrice: 0, description: "50 أداة OSINT + قوائم dorks + سكربتات", image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.7, ratingCount: 67, views: 756, sales: 34 },
+    { id: "p4", categoryId: "cat3", name: "VPN Lifetime", priceSYP: 850000, oldPrice: 1200000, description: "اشتراك مدى الحياة - 15 دولة - WireGuard", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400", downloadLink: "", createdAt: Date.now(), stock: 100, isDigital: true, rating: 4.8, ratingCount: 203, views: 2104, sales: 156 },
+    { id: "p5", categoryId: "cat4", name: "دورة اختراق أخلاقي", priceSYP: 680000, oldPrice: 0, description: "35 ساعة فيديو بالعربي - شهادة معتمدة", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400", downloadLink: "", createdAt: Date.now(), stock: 999, isDigital: true, rating: 4.9, ratingCount: 312, views: 3421, sales: 278 },
+    { id: "p6", categoryId: "cat5", name: "Flipper Zero", priceSYP: 2750000, oldPrice: 3200000, description: "جهاز Flipper Zero أصلي + كفر + هوائي", image: "https://images.unsplash.com/photo-1597225244661-8cfb5ddb0f8e?w=400", downloadLink: "", createdAt: Date.now(), stock: 7, isDigital: false, rating: 5.0, ratingCount: 89, views: 5432, sales: 23 }
 ];
+
+// Coupons
+let coupons = ls.get("idlebx:coupons", [
+    { code: "WELCOME10", discount: 10, type: "percent", expires: null, uses: 0, maxUses: 100, minOrder: 100000 },
+    { code: "SAVE50", discount: 50000, type: "fixed", expires: null, uses: 0, maxUses: 50, minOrder: 500000 },
+    { code: "CYBER10", discount: 10, type: "percent", expires: null, uses: 0, maxUses: 999, minOrder: 0 }
+]);
+
+// Referrals
+let referrals = ls.get("idlebx:referrals", {});
 
 // ============== Main App Component ==============
 function App() {
@@ -57,13 +73,22 @@ function App() {
     const [wishlist, setWishlist] = useState(() => ls.get("idlebx:wishlist", []));
     const [cartOpen, setCartOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [discountCode, setDiscountCode] = useState("");
+    const [couponCode, setCouponCode] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState(null);
     const [adminOpen, setAdminOpen] = useState(false);
     const [isAuth, setIsAuth] = useState(() => ls.get("idlebx:auth", false));
-    const [adminTab, setAdminTab] = useState("products");
+    const [adminTab, setAdminTab] = useState("dashboard");
     const [purchaseStatus, setPurchaseStatus] = useState(null);
     const [userId, setUserId] = useState(() => ls.get("idlebx:user_id", ""));
     const [showUserIdModal, setShowUserIdModal] = useState(false);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [reviewText, setReviewText] = useState("");
+    const [reviewRating, setReviewRating] = useState(5);
+    const [darkMode, setDarkMode] = useState(() => ls.get("idlebx:darkmode", false));
+    const [notifications, setNotifications] = useState([]);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [referralLink, setReferralLink] = useState("");
     
     // Admin form states
     const [newCatName, setNewCatName] = useState("");
@@ -71,6 +96,7 @@ function App() {
     const [newCatImg, setNewCatImg] = useState("");
     const [newProdName, setNewProdName] = useState("");
     const [newProdPrice, setNewProdPrice] = useState("");
+    const [newProdOldPrice, setNewProdOldPrice] = useState("");
     const [newProdDesc, setNewProdDesc] = useState("");
     const [newProdImg, setNewProdImg] = useState("");
     const [newProdCat, setNewProdCat] = useState("");
@@ -78,11 +104,33 @@ function App() {
     const [newProdDigital, setNewProdDigital] = useState(true);
     const [newProdRating, setNewProdRating] = useState("4.5");
     const [newProdLink, setNewProdLink] = useState("");
+    const [newCouponCode, setNewCouponCode] = useState("");
+    const [newCouponDiscount, setNewCouponDiscount] = useState("");
+    const [newCouponType, setNewCouponType] = useState("percent");
+    const [newCouponMinOrder, setNewCouponMinOrder] = useState("0");
     
     const pwdRef = useRef(null);
     const userIdRef = useRef(null);
     const clickCount = useRef(0);
     const clickTimer = useRef(null);
+    const chartRef = useRef(null);
+
+    // Apply dark mode
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+        ls.set("idlebx:darkmode", darkMode);
+    }, [darkMode]);
+
+    // Add notification
+    const addNotification = (title, message, type = "info") => {
+        const newNotif = { id: Date.now(), title, message, type, read: false, date: new Date() };
+        setNotifications(prev => [newNotif, ...prev].slice(0, 50));
+        setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== newNotif.id)), 5000);
+    };
 
     // Save data
     useEffect(() => { ls.set("idlebx:settings", settings); }, [settings]);
@@ -92,6 +140,8 @@ function App() {
     useEffect(() => { ls.set("idlebx:wishlist", wishlist); }, [wishlist]);
     useEffect(() => { ls.set("idlebx:auth", isAuth); }, [isAuth]);
     useEffect(() => { if (userId) ls.set("idlebx:user_id", userId); }, [userId]);
+    useEffect(() => { ls.set("idlebx:coupons", coupons); }, []);
+    useEffect(() => { ls.set("idlebx:referrals", referrals); }, []);
 
     // Filter products
     const filteredProducts = useMemo(() => {
@@ -104,6 +154,8 @@ function App() {
         if (sortBy === "price-asc") list.sort((a, b) => a.priceSYP - b.priceSYP);
         else if (sortBy === "price-desc") list.sort((a, b) => b.priceSYP - a.priceSYP);
         else if (sortBy === "popular") list.sort((a, b) => b.views - a.views);
+        else if (sortBy === "rating") list.sort((a, b) => b.rating - a.rating);
+        else if (sortBy === "bestseller") list.sort((a, b) => b.sales - a.sales);
         else list.sort((a, b) => b.createdAt - a.createdAt);
         return list;
     }, [products, activeCat, search, sortBy]);
@@ -115,8 +167,35 @@ function App() {
         return sum + (p ? p.priceSYP * item.qty : 0);
     }, 0);
     
-    const discount = discountCode.toUpperCase() === settings.discountCode.toUpperCase() ? settings.discountPercent : 0;
-    const finalTotal = cartTotal * (1 - discount / 100);
+    // Calculate discount from coupon
+    const getDiscountAmount = () => {
+        if (!appliedCoupon) return 0;
+        if (appliedCoupon.type === "percent") return (cartTotal * appliedCoupon.discount) / 100;
+        return appliedCoupon.discount;
+    };
+    
+    const discountAmount = getDiscountAmount();
+    const shippingFee = cartTotal > settings.freeShippingMin ? 0 : settings.shippingFee;
+    const finalTotal = cartTotal - discountAmount + shippingFee;
+
+    // Apply coupon
+    const applyCoupon = () => {
+        const coupon = coupons.find(c => c.code === couponCode.toUpperCase());
+        if (!coupon) {
+            addNotification("خطأ", "كود الخصم غير صحيح", "error");
+            return;
+        }
+        if (coupon.maxUses && coupon.uses >= coupon.maxUses) {
+            addNotification("خطأ", "تم استخدام هذا الكود أقصى عدد مرات", "error");
+            return;
+        }
+        if (coupon.minOrder && cartTotal < coupon.minOrder) {
+            addNotification("خطأ", `الحد الأدنى للطلب هو ${formatPrice(coupon.minOrder)}`, "error");
+            return;
+        }
+        setAppliedCoupon(coupon);
+        addNotification("تم التطبيق", `تم تطبيق كود الخصم ${coupon.code}`, "success");
+    };
 
     // Cart functions
     const addToCart = (productId) => {
@@ -126,6 +205,7 @@ function App() {
             return [...prev, { id: productId, qty: 1 }];
         });
         setCartOpen(true);
+        addNotification("تم الإضافة", "تم إضافة المنتج إلى السلة", "success");
     };
     
     const updateQty = (productId, qty) => {
@@ -134,11 +214,34 @@ function App() {
     };
     
     const toggleWishlist = (id) => {
-        setWishlist(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+        setWishlist(prev => {
+            const newWishlist = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+            addNotification("المفضلة", prev.includes(id) ? "تم إزالة المنتج من المفضلة" : "تم إضافة المنتج إلى المفضلة", "info");
+            return newWishlist;
+        });
     };
     
     const incrementView = (id) => {
         setProducts(prev => prev.map(p => p.id === id ? { ...p, views: p.views + 1 } : p));
+    };
+
+    // Add review
+    const addReview = () => {
+        if (!reviewText.trim()) return;
+        setProducts(prev => prev.map(p => 
+            p.id === selectedProduct?.id 
+                ? { 
+                    ...p, 
+                    rating: ((p.rating * p.ratingCount) + reviewRating) / (p.ratingCount + 1),
+                    ratingCount: p.ratingCount + 1,
+                    reviews: [...(p.reviews || []), { user: userId || "مستخدم", rating: reviewRating, text: reviewText, date: new Date() }]
+                  }
+                : p
+        ));
+        setShowReviewModal(false);
+        setReviewText("");
+        setReviewRating(5);
+        addNotification("شكراً لك", "تم إضافة تقييمك بنجاح", "success");
     };
 
     // Purchase via Bot
@@ -156,7 +259,7 @@ function App() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: `🛍️ طلب شراء جديد!\n\n📦 المنتج: ${product.name}\n💰 السعر: ${formatPrice(product.priceSYP)}\n🔗 رابط المنتج: ${product.downloadLink || "لا يوجد رابط تلقائي"}\n\nلإتمام الشراء، يرجى إرسال المبلغ إلى المحفظة التالية: [رقم المحفظة]`,
+                    text: `🛍️ طلب شراء جديد من الموقع!\n\n📦 المنتج: ${product.name}\n💰 السعر: ${formatPrice(product.priceSYP)}\n🔗 رابط المنتج: ${product.downloadLink || "لا يوجد رابط تلقائي"}\n\nللشراء، يرجى إرسال المبلغ إلى المحفظة التالية: [رقم المحفظة]`,
                     parse_mode: "HTML"
                 })
             });
@@ -164,18 +267,25 @@ function App() {
             const data = await response.json();
             
             if (data.ok) {
-                setPurchaseStatus({
-                    success: true,
-                    message: `✅ تم إرسال طلب شراء ${product.name} إلى البوت!\nالرجاء مراجعة البوت لإتمام الدفع.`
-                });
+                setPurchaseStatus({ success: true, message: `✅ تم إرسال طلب شراء ${product.name} إلى البوت!` });
+                addNotification("تم الإرسال", `تم إرسال طلب ${product.name} إلى البوت`, "success");
             } else {
-                setPurchaseStatus({ error: true, message: "❌ فشل إرسال الطلب. تأكد من توكن البوت." });
+                setPurchaseStatus({ error: true, message: "❌ فشل إرسال الطلب" });
             }
         } catch (error) {
             setPurchaseStatus({ error: true, message: `❌ خطأ: ${error.message}` });
         }
         
         setTimeout(() => setPurchaseStatus(null), 10000);
+    };
+
+    // Generate referral link
+    const generateReferralLink = () => {
+        const refId = userId || uid();
+        if (!userId) setUserId(refId);
+        const link = `${window.location.origin}?ref=${refId}`;
+        setReferralLink(link);
+        addNotification("رابط الدعوة", "تم إنشاء رابط الدعوة الخاص بك", "info");
     };
 
     // Admin functions
@@ -190,7 +300,7 @@ function App() {
         };
         setCategories([...categories, newCat]);
         setNewCatName(""); setNewCatDesc(""); setNewCatImg("");
-        alert("تم إضافة القسم");
+        addNotification("تم الإضافة", "تم إضافة القسم بنجاح", "success");
     };
     
     const deleteCategory = (id) => {
@@ -198,6 +308,7 @@ function App() {
         setCategories(categories.filter(c => c.id !== id));
         setProducts(products.filter(p => p.categoryId !== id));
         if (activeCat === id) setActiveCat("all");
+        addNotification("تم الحذف", "تم حذف القسم", "warning");
     };
     
     const addProduct = () => {
@@ -209,6 +320,7 @@ function App() {
             id: uid(),
             name: newProdName,
             priceSYP: priceNum,
+            oldPrice: parseInt(newProdOldPrice) || 0,
             description: newProdDesc || "",
             image: newProdImg || "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400",
             downloadLink: newProdLink || "",
@@ -217,18 +329,44 @@ function App() {
             stock: parseInt(newProdStock) || 999,
             isDigital: newProdDigital,
             rating: parseFloat(newProdRating) || 4.5,
-            views: 0
+            ratingCount: 0,
+            views: 0,
+            sales: 0,
+            reviews: []
         };
         setProducts([newProduct, ...products]);
-        setNewProdName(""); setNewProdPrice(""); setNewProdDesc(""); setNewProdImg(""); setNewProdLink("");
+        setNewProdName(""); setNewProdPrice(""); setNewProdOldPrice(""); setNewProdDesc(""); setNewProdImg(""); setNewProdLink("");
         setNewProdStock("999"); setNewProdDigital(true); setNewProdRating("4.5");
-        alert("تم إضافة المنتج");
+        addNotification("تم الإضافة", `تم إضافة المنتج ${newProdName}`, "success");
     };
     
     const deleteProduct = (id) => {
         if (!confirm("هل تريد حذف هذا المنتج؟")) return;
+        const product = products.find(p => p.id === id);
         setProducts(products.filter(p => p.id !== id));
         setCart(cart.filter(i => i.id !== id));
+        addNotification("تم الحذف", `تم حذف المنتج ${product?.name}`, "warning");
+    };
+
+    const addCoupon = () => {
+        if (!newCouponCode.trim()) return alert("أدخل كود الخصم");
+        const discount = parseInt(newCouponDiscount);
+        if (isNaN(discount)) return alert("أدخل قيمة الخصم");
+        
+        const newCoupon = {
+            code: newCouponCode.toUpperCase(),
+            discount: discount,
+            type: newCouponType,
+            minOrder: parseInt(newCouponMinOrder) || 0,
+            expires: null,
+            uses: 0,
+            maxUses: 999,
+            createdAt: new Date()
+        };
+        coupons.push(newCoupon);
+        ls.set("idlebx:coupons", coupons);
+        setNewCouponCode(""); setNewCouponDiscount(""); setNewCouponType("percent"); setNewCouponMinOrder("0");
+        addNotification("تم الإضافة", `تم إضافة كود الخصم ${newCouponCode}`, "success");
     };
 
     // Admin panel access
@@ -255,6 +393,7 @@ function App() {
         if (pwd === settings.adminPwd) {
             setIsAuth(true);
             setAdminOpen(true);
+            addNotification("مرحباً مشرف", "تم تسجيل الدخول إلى لوحة التحكم", "success");
         } else {
             alert("كلمة مرور خاطئة");
         }
@@ -263,6 +402,7 @@ function App() {
     const logout = () => {
         setIsAuth(false);
         setAdminOpen(false);
+        addNotification("تم الخروج", "تم تسجيل الخروج من لوحة التحكم", "info");
     };
     
     const saveUserId = () => {
@@ -270,13 +410,54 @@ function App() {
         if (id) {
             setUserId(id);
             setShowUserIdModal(false);
-            alert("تم حفظ معرف التليجرام!");
+            generateReferralLink();
+            addNotification("تم الحفظ", "تم حفظ معرف التليجرام", "success");
         } else {
             alert("الرجاء إدخال معرف التليجرام الخاص بك");
         }
     };
 
-    // WhatsApp link (fallback)
+    // Export data
+    const exportData = () => {
+        const data = {
+            products, categories, settings, coupons, users: { cart, wishlist }
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `idlebx-backup-${new Date().toISOString()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        addNotification("تم التصدير", "تم تصدير البيانات بنجاح", "success");
+    };
+
+    // Import data
+    const importData = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.products) setProducts(data.products);
+                if (data.categories) setCategories(data.categories);
+                if (data.settings) setSettings(data.settings);
+                if (data.coupons) ls.set("idlebx:coupons", data.coupons);
+                addNotification("تم الاستيراد", "تم استيراد البيانات بنجاح", "success");
+            } catch (err) {
+                alert("خطأ في قراءة الملف");
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    // Get top products
+    const topProducts = useMemo(() => {
+        return [...products].sort((a, b) => b.sales - a.sales).slice(0, 5);
+    }, [products]);
+
+    // WhatsApp links
     const getWhatsAppLink = (product) => {
         const cat = categories.find(c => c.id === product.categoryId);
         const msg = `مرحباً ${settings.shopName} 👋\n\nأرغب بشراء المنتج التالي:\n\n📦 *${product.name}*\n🏷️ القسم: ${cat?.name || ''}\n💰 السعر: ${formatPrice(product.priceSYP)}\n${product.isDigital ? '⚡ تسليم فوري رقمي' : '📦 منتج فيزيائي'}\n⭐ التقييم: ${product.rating}/5\n\n📝 الوصف:\n${product.description}\n\nالرجاء تزويدي بطريقة الدفع والاستلام.`;
@@ -288,33 +469,53 @@ function App() {
             const p = products.find(x => x.id === item.id);
             return `• ${p.name} ×${item.qty} = ${formatPrice(p.priceSYP * item.qty)}`;
         }).join('\n');
-        const msg = `مرحباً ${settings.shopName} 👋\n\nأرغب بطلب المنتجات التالية:\n\n${items}\n\n💰 المجموع: ${formatPrice(cartTotal)}\n${discount > 0 ? `🎉 خصم ${settings.discountCode} (${discount}%): -${formatPrice(cartTotal - finalTotal)}\n💵 المبلغ النهائي: ${formatPrice(finalTotal)}` : ''}\n\nعدد المنتجات: ${cart.reduce((s, i) => s + i.qty, 0)}\n\nالرجاء تأكيد الطلب وطريقة الدفع.`;
+        const msg = `مرحباً ${settings.shopName} 👋\n\nأرغب بطلب المنتجات التالية:\n\n${items}\n\n💰 المجموع: ${formatPrice(cartTotal)}\n${appliedCoupon ? `🎉 خصم ${appliedCoupon.code}: -${formatPrice(discountAmount)}\n` : ''}🚚 الشحن: ${shippingFee === 0 ? 'مجاني' : formatPrice(shippingFee)}\n💵 المبلغ النهائي: ${formatPrice(finalTotal)}\n\nعدد المنتجات: ${cart.reduce((s, i) => s + i.qty, 0)}\n\nالرجاء تأكيد الطلب وطريقة الدفع.`;
         return `https://wa.me/${settings.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`;
     };
 
+    // Calculate stats
+    const totalSales = products.reduce((sum, p) => sum + p.sales, 0);
+    const totalRevenue = products.reduce((sum, p) => sum + (p.priceSYP * p.sales), 0);
+    const totalViews = products.reduce((sum, p) => sum + p.views, 0);
+    const outOfStock = products.filter(p => p.stock === 0).length;
+
+    // JSX
     return (
         <div>
             {/* User ID Modal */}
             {showUserIdModal && (
-                <div className="admin-panel" style={{ zIndex: 3000 }}>
-                    <div className="admin-container" style={{ maxWidth: '400px' }}>
+                <div className="modal">
+                    <div className="modal-content">
                         <div className="admin-header">
                             <h3>🤖 تفعيل الشراء عبر البوت</h3>
                             <button className="login-btn" onClick={() => setShowUserIdModal(false)}>✕</button>
                         </div>
                         <div style={{ padding: '20px', textAlign: 'center' }}>
-                            <p style={{ marginBottom: '20px' }}>للشراء عبر بوت التليجرام، الرجاء إدخال معرفك في التليجرام:</p>
-                            <input 
-                                type="text" 
-                                ref={userIdRef} 
-                                className="search-input" 
-                                placeholder="مثال: @username أو 123456789"
-                                style={{ width: '100%', marginBottom: '20px' }}
-                            />
-                            <p style={{ fontSize: '12px', color: '#888', marginBottom: '20px' }}>
-                                💡 يمكنك الحصول على معرفك من @userinfobot في التليجرام
-                            </p>
+                            <p style={{ marginBottom: '20px' }}>للشراء عبر بوت التليجرام، الرجاء إدخال معرفك:</p>
+                            <input type="text" ref={userIdRef} className="search-input" placeholder="مثال: @username أو 123456789" style={{ width: '100%', marginBottom: '20px' }} />
+                            <p style={{ fontSize: '12px', color: '#888', marginBottom: '20px' }}>💡 يمكنك الحصول على معرفك من @userinfobot في التليجرام</p>
                             <button className="btn-primary" onClick={saveUserId}>تأكيد</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Review Modal */}
+            {showReviewModal && selectedProduct && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <div className="admin-header">
+                            <h3>⭐ تقييم المنتج: {selectedProduct.name}</h3>
+                            <button className="login-btn" onClick={() => setShowReviewModal(false)}>✕</button>
+                        </div>
+                        <div style={{ padding: '20px' }}>
+                            <div className="rating-stars">
+                                {[1, 2, 3, 4, 5].map(star => (
+                                    <span key={star} className={`star ${reviewRating >= star ? 'active' : ''}`} onClick={() => setReviewRating(star)}>★</span>
+                                ))}
+                            </div>
+                            <textarea className="search-input" style={{ width: '100%', height: '100px', marginBottom: '15px' }} placeholder="اكتب تقييمك هنا..." value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
+                            <button className="btn-primary" style={{ width: '100%' }} onClick={addReview}>إرسال التقييم</button>
                         </div>
                     </div>
                 </div>
@@ -322,8 +523,8 @@ function App() {
 
             {/* Purchase Status Modal */}
             {purchaseStatus && (
-                <div className="admin-panel" style={{ zIndex: 3000 }}>
-                    <div className="admin-container" style={{ maxWidth: '450px' }}>
+                <div className="modal">
+                    <div className="modal-content" style={{ maxWidth: '400px' }}>
                         <div className="admin-header">
                             <h3>{purchaseStatus.success ? '✅ تم الإرسال' : (purchaseStatus.error ? '❌ فشل' : '⏳ جاري المعالجة')}</h3>
                             <button className="login-btn" onClick={() => setPurchaseStatus(null)}>✕</button>
@@ -333,6 +534,27 @@ function App() {
                             {purchaseStatus.loading && <div className="loading-spinner" style={{ marginTop: '20px' }}></div>}
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Notifications Panel */}
+            {showNotifications && (
+                <div style={{ position: 'fixed', top: '80px', right: '20px', width: '320px', maxHeight: '400px', overflow: 'auto', background: 'var(--dark-card)', border: '1px solid var(--primary)', borderRadius: '16px', zIndex: 1000, padding: '10px' }}>
+                    <div className="admin-header" style={{ marginBottom: '10px' }}>
+                        <h4 style={{ margin: 0 }}>📢 الإشعارات</h4>
+                        <button className="login-btn" onClick={() => setShowNotifications(false)}>✕</button>
+                    </div>
+                    {notifications.length === 0 ? (
+                        <p style={{ textAlign: 'center', padding: '20px', color: 'var(--text-dim)' }}>لا توجد إشعارات</p>
+                    ) : (
+                        notifications.map(n => (
+                            <div key={n.id} style={{ padding: '10px', borderBottom: '1px solid var(--dark-border)', marginBottom: '5px' }}>
+                                <strong>{n.title}</strong>
+                                <p style={{ fontSize: '12px', marginTop: '5px' }}>{n.message}</p>
+                                <small style={{ color: 'var(--text-dim)' }}>{new Date(n.date).toLocaleTimeString()}</small>
+                            </div>
+                        ))
+                    )}
                 </div>
             )}
 
@@ -357,18 +579,17 @@ function App() {
                             <select className="sort-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                                 <option value="new">الأحدث</option>
                                 <option value="popular">الأكثر مشاهدة</option>
+                                <option value="bestseller">الأكثر مبيعاً</option>
+                                <option value="rating">الأعلى تقييماً</option>
                                 <option value="price-asc">السعر: منخفض</option>
                                 <option value="price-desc">السعر: مرتفع</option>
                             </select>
                         </div>
                         
                         <div style={{ display: 'flex', gap: '10px' }}>
-                            {userId && (
-                                <div style={{ background: '#10b98120', padding: '8px 12px', borderRadius: '10px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <span>🤖</span>
-                                    <span>{userId.length > 15 ? userId.substring(0, 12) + '...' : userId}</span>
-                                </div>
-                            )}
+                            <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} title={darkMode ? "الوضع الفاتح" : "الوضع المظلم"}>
+                                {darkMode ? '☀️' : '🌙'}
+                            </button>
                             <button className="cart-button" onClick={() => setCartOpen(true)}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                                     <path d="M6 6h15l-1.5 8.5H7.5L6 6zM9 20a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18 20a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
@@ -391,8 +612,16 @@ function App() {
                     <a href="#products" className="btn-primary">تصفح الأدوات</a>
                 </div>
 
+                {/* Stats Bar */}
+                <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '15px', marginBottom: '30px', background: 'var(--dark-card)', padding: '15px', borderRadius: '16px' }}>
+                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary)' }}>{products.length}</div><div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>منتج</div></div>
+                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary)' }}>{totalSales}</div><div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>مبيع</div></div>
+                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary)' }}>{formatPrice(totalRevenue)}</div><div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>إيرادات</div></div>
+                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary)' }}>{totalViews}</div><div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>مشاهدة</div></div>
+                </div>
+
                 {/* Categories */}
-                <h2 className="section-title">الأقسام <span style={{ fontSize: '12px', color: '#71717a' }}>{categories.length} أقسام</span></h2>
+                <h2 className="section-title">الأقسام <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{categories.length} أقسام</span></h2>
                 <div className="categories-grid">
                     <div className={`category-card ${activeCat === 'all' ? 'active' : ''}`} onClick={() => setActiveCat('all')}>
                         <div className="category-card-content"><h3>✨ الكل</h3><p>جميع المنتجات</p></div>
@@ -405,10 +634,57 @@ function App() {
                     ))}
                 </div>
 
-                {/* Products */}
+                {/* Top Products */}
+                <h2 className="section-title">🏆 الأكثر مبيعاً</h2>
+                <div className="products-grid">
+                    {topProducts.map(product => {
+                        const inWishlist = wishlist.includes(product.id);
+                        const cat = categories.find(c => c.id === product.categoryId);
+                        return (
+                            <div key={product.id} className="product-card">
+                                <div className="product-image">
+                                    <img src={product.image} alt={product.name} />
+                                    <div className="product-badges">
+                                        {product.isDigital && <span className="badge-digital">رقمي</span>}
+                                        {product.stock < 10 && !product.isDigital && <span className="badge-stock">باقي {product.stock}</span>}
+                                        {product.oldPrice > 0 && <span className="badge-sale">-{Math.round((1 - product.priceSYP / product.oldPrice) * 100)}%</span>}
+                                    </div>
+                                    <button className={`wishlist-btn ${inWishlist ? 'active' : ''}`} onClick={() => toggleWishlist(product.id)}>
+                                        {inWishlist ? '❤️' : '🤍'}
+                                    </button>
+                                    <div className="product-stats">
+                                        <span className="stat">⭐ {product.rating}</span>
+                                        <span className="stat">👁 {product.views}</span>
+                                        <span className="stat">🛒 {product.sales}</span>
+                                    </div>
+                                </div>
+                                <div className="product-info">
+                                    <div className="product-title">{product.name}</div>
+                                    <div className="product-desc">{product.description}</div>
+                                    <div className="product-category">{cat?.name}</div>
+                                    <div className="product-price">
+                                        {formatPrice(product.priceSYP)}
+                                        {product.oldPrice > 0 && <span className="product-old-price">{formatPrice(product.oldPrice)}</span>}
+                                    </div>
+                                    <div className="product-actions">
+                                        {settings.enableBot && settings.botToken && product.isDigital ? (
+                                            <button className="btn-buy" onClick={() => purchaseViaBot(product)}>🤖 شراء عبر البوت</button>
+                                        ) : (
+                                            <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="btn-buy" onClick={() => incrementView(product.id)}>📞 طلب عبر واتساب</a>
+                                        )}
+                                        <button className="btn-cart" onClick={() => addToCart(product.id)}>🛒</button>
+                                        <button className="btn-cart" onClick={() => { setSelectedProduct(product); setShowReviewModal(true); }}>⭐</button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* All Products */}
                 <h2 className="section-title" id="products">
                     {activeCat === 'all' ? 'جميع المنتجات' : categories.find(c => c.id === activeCat)?.name}
-                    <span style={{ fontSize: '12px', color: '#71717a' }}>{filteredProducts.length} منتج</span>
+                    <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{filteredProducts.length} منتج</span>
                 </h2>
                 
                 {filteredProducts.length === 0 ? (
@@ -425,6 +701,7 @@ function App() {
                                         <div className="product-badges">
                                             {product.isDigital && <span className="badge-digital">رقمي</span>}
                                             {product.stock < 10 && !product.isDigital && <span className="badge-stock">باقي {product.stock}</span>}
+                                            {product.oldPrice > 0 && <span className="badge-sale">-{Math.round((1 - product.priceSYP / product.oldPrice) * 100)}%</span>}
                                         </div>
                                         <button className={`wishlist-btn ${inWishlist ? 'active' : ''}`} onClick={() => toggleWishlist(product.id)}>
                                             {inWishlist ? '❤️' : '🤍'}
@@ -432,24 +709,25 @@ function App() {
                                         <div className="product-stats">
                                             <span className="stat">⭐ {product.rating}</span>
                                             <span className="stat">👁 {product.views}</span>
+                                            <span className="stat">🛒 {product.sales}</span>
                                         </div>
                                     </div>
                                     <div className="product-info">
                                         <div className="product-title">{product.name}</div>
                                         <div className="product-desc">{product.description}</div>
                                         <div className="product-category">{cat?.name}</div>
-                                        <div className="product-price">{formatPrice(product.priceSYP)}</div>
+                                        <div className="product-price">
+                                            {formatPrice(product.priceSYP)}
+                                            {product.oldPrice > 0 && <span className="product-old-price">{formatPrice(product.oldPrice)}</span>}
+                                        </div>
                                         <div className="product-actions">
                                             {settings.enableBot && settings.botToken && product.isDigital ? (
-                                                <button className="btn-buy" onClick={() => purchaseViaBot(product)} style={{ background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                                                    🤖 شراء عبر البوت
-                                                </button>
+                                                <button className="btn-buy" onClick={() => purchaseViaBot(product)}>🤖 شراء عبر البوت</button>
                                             ) : (
-                                                <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="btn-buy" onClick={() => incrementView(product.id)}>
-                                                    📞 طلب عبر واتساب
-                                                </a>
+                                                <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="btn-buy" onClick={() => incrementView(product.id)}>📞 طلب عبر واتساب</a>
                                             )}
                                             <button className="btn-cart" onClick={() => addToCart(product.id)}>🛒</button>
+                                            <button className="btn-cart" onClick={() => { setSelectedProduct(product); setShowReviewModal(true); }}>⭐</button>
                                         </div>
                                     </div>
                                 </div>
@@ -462,10 +740,13 @@ function App() {
             {/* Cart Sidebar */}
             <div className={`cart-overlay ${cartOpen ? 'open' : ''}`} onClick={() => setCartOpen(false)}></div>
             <div className={`cart-sidebar ${cartOpen ? 'open' : ''}`}>
-                <div className="cart-header"><h3>🛒 سلة التسوق</h3><button className="close-cart" onClick={() => setCartOpen(false)}>✕</button></div>
+                <div className="cart-header">
+                    <h3>🛒 سلة التسوق</h3>
+                    <button className="close-cart" onClick={() => setCartOpen(false)}>✕</button>
+                </div>
                 <div className="cart-items">
                     {cart.length === 0 ? (
-                        <div className="empty-state" style={{ padding: '40px' }}><p>السلة فارغة</p></div>
+                        <div className="empty-state"><p>السلة فارغة</p></div>
                     ) : (
                         cart.map(item => {
                             const p = products.find(x => x.id === item.id);
@@ -492,14 +773,15 @@ function App() {
                     <div className="cart-footer">
                         <div className="discount-box">
                             <div className="discount-input">
-                                <input type="text" placeholder="كود الخصم" value={discountCode} onChange={(e) => setDiscountCode(e.target.value)} />
-                                <button onClick={() => {}}>تطبيق</button>
+                                <input type="text" placeholder="كود الخصم" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
+                                <button onClick={applyCoupon}>تطبيق</button>
                             </div>
-                            {discount > 0 && <div className="discount-message">✓ تم تطبيق خصم {discount}%</div>}
+                            {appliedCoupon && <div className="discount-message">✓ تم تطبيق خصم {appliedCoupon.type === "percent" ? `${appliedCoupon.discount}%` : formatPrice(appliedCoupon.discount)}</div>}
                         </div>
                         <div className="cart-total">
                             <div className="total-row"><span>المجموع</span><span>{formatPrice(cartTotal)}</span></div>
-                            {discount > 0 && <div className="total-row"><span>الخصم ({discount}%)</span><span>-{formatPrice(cartTotal - finalTotal)}</span></div>}
+                            {appliedCoupon && <div className="total-row"><span>الخصم</span><span>-{formatPrice(discountAmount)}</span></div>}
+                            <div className="total-row"><span>الشحن</span><span>{shippingFee === 0 ? 'مجاني' : formatPrice(shippingFee)}</span></div>
                             <div className="total-row grand-total"><span>الإجمالي</span><span>{formatPrice(finalTotal)}</span></div>
                         </div>
                         <a href={getCartWhatsAppLink()} target="_blank" className="whatsapp-checkout">📱 إتمام الطلب عبر واتساب</a>
@@ -535,12 +817,35 @@ function App() {
                         ) : (
                             <>
                                 <div className="admin-tabs">
-                                    <button className={`admin-tab ${adminTab === 'products' ? 'active' : ''}`} onClick={() => setAdminTab('products')}>المنتجات</button>
-                                    <button className={`admin-tab ${adminTab === 'categories' ? 'active' : ''}`} onClick={() => setAdminTab('categories')}>الأقسام</button>
-                                    <button className={`admin-tab ${adminTab === 'settings' ? 'active' : ''}`} onClick={() => setAdminTab('settings')}>الإعدادات</button>
-                                    <button className={`admin-tab ${adminTab === 'bot' ? 'active' : ''}`} onClick={() => setAdminTab('bot')}>🤖 البوت</button>
+                                    <button className={`admin-tab ${adminTab === 'dashboard' ? 'active' : ''}`} onClick={() => setAdminTab('dashboard')}>📊 لوحة القيادة</button>
+                                    <button className={`admin-tab ${adminTab === 'products' ? 'active' : ''}`} onClick={() => setAdminTab('products')}>📦 المنتجات</button>
+                                    <button className={`admin-tab ${adminTab === 'categories' ? 'active' : ''}`} onClick={() => setAdminTab('categories')}>📁 الأقسام</button>
+                                    <button className={`admin-tab ${adminTab === 'coupons' ? 'active' : ''}`} onClick={() => setAdminTab('coupons')}>🏷️ كوبونات</button>
+                                    <button className={`admin-tab ${adminTab === 'settings' ? 'active' : ''}`} onClick={() => setAdminTab('settings')}>⚙️ الإعدادات</button>
+                                    <button className={`admin-tab ${adminTab === 'backup' ? 'active' : ''}`} onClick={() => setAdminTab('backup')}>💾 نسخ احتياطي</button>
                                 </div>
+
+                                {/* Dashboard Tab */}
+                                {adminTab === 'dashboard' && (
+                                    <div>
+                                        <div className="admin-stats">
+                                            <div className="stat-card"><h3>{products.length}</h3><p>منتج</p></div>
+                                            <div className="stat-card"><h3>{totalSales}</h3><p>مبيع</p></div>
+                                            <div className="stat-card"><h3>{formatPrice(totalRevenue)}</h3><p>إيرادات</p></div>
+                                            <div className="stat-card"><h3>{totalViews}</h3><p>مشاهدة</p></div>
+                                            <div className="stat-card"><h3>{outOfStock}</h3><p>نفد من المخزون</p></div>
+                                            <div className="stat-card"><h3>{coupons.length}</h3><p>كوبون</p></div>
+                                        </div>
+                                        <div className="info-box">
+                                            <strong>📈 أفضل 5 منتجات مبيعاً:</strong><br/>
+                                            {topProducts.map((p, i) => (
+                                                <div key={p.id} style={{ marginTop: '8px' }}>{i+1}. {p.name} - {p.sales} مبيعات</div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                                 
+                                {/* Products Tab */}
                                 {adminTab === 'products' && (
                                     <>
                                         <div className="admin-form">
@@ -550,18 +855,19 @@ function App() {
                                                 <div className="form-group"><label>السعر (ل.س)</label><input type="number" value={newProdPrice} onChange={(e) => setNewProdPrice(e.target.value)} /></div>
                                             </div>
                                             <div className="form-row">
+                                                <div className="form-group"><label>السعر القديم (ل.س)</label><input type="number" value={newProdOldPrice} onChange={(e) => setNewProdOldPrice(e.target.value)} /></div>
                                                 <div className="form-group"><label>القسم</label>
                                                     <select value={newProdCat} onChange={(e) => setNewProdCat(e.target.value)}>
                                                         <option value="">اختر القسم</option>
                                                         {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                                     </select>
                                                 </div>
-                                                <div className="form-group"><label>المخزون</label><input type="number" value={newProdStock} onChange={(e) => setNewProdStock(e.target.value)} /></div>
                                             </div>
                                             <div className="form-row">
+                                                <div className="form-group"><label>المخزون</label><input type="number" value={newProdStock} onChange={(e) => setNewProdStock(e.target.value)} /></div>
                                                 <div className="form-group"><label>التقييم</label><input type="number" step="0.1" value={newProdRating} onChange={(e) => setNewProdRating(e.target.value)} /></div>
-                                                <div className="form-group"><label>رابط الصورة</label><input type="text" value={newProdImg} onChange={(e) => setNewProdImg(e.target.value)} placeholder="https://..." /></div>
                                             </div>
+                                            <div className="form-group"><label>رابط الصورة</label><input type="text" value={newProdImg} onChange={(e) => setNewProdImg(e.target.value)} placeholder="https://..." /></div>
                                             <div className="form-group"><label>رابط التحميل (للمنتجات الرقمية)</label><input type="text" value={newProdLink} onChange={(e) => setNewProdLink(e.target.value)} placeholder="https://t.me/..." /></div>
                                             <div className="form-group"><label>الوصف</label><textarea rows="2" value={newProdDesc} onChange={(e) => setNewProdDesc(e.target.value)}></textarea></div>
                                             <div className="form-group"><label><input type="checkbox" checked={newProdDigital} onChange={(e) => setNewProdDigital(e.target.checked)} /> منتج رقمي</label></div>
@@ -576,8 +882,7 @@ function App() {
                                                     <div key={p.id} className="list-item">
                                                         <div className="list-item-info">
                                                             <h4>{p.name}</h4>
-                                                            <p>{cat?.name} • {formatPrice(p.priceSYP)} • {p.isDigital ? 'رقمي' : 'فيزيائي'}</p>
-                                                            {p.downloadLink && <p style={{ fontSize: '11px', color: '#10b981' }}>رابط التحميل: {p.downloadLink.substring(0, 30)}...</p>}
+                                                            <p>{cat?.name} • {formatPrice(p.priceSYP)} • {p.isDigital ? 'رقمي' : 'فيزيائي'} • مخزون: {p.stock} • مبيعات: {p.sales}</p>
                                                         </div>
                                                         <div className="list-item-actions">
                                                             <button className="delete-btn" onClick={() => deleteProduct(p.id)}>حذف</button>
@@ -589,6 +894,7 @@ function App() {
                                     </>
                                 )}
                                 
+                                {/* Categories Tab */}
                                 {adminTab === 'categories' && (
                                     <>
                                         <div className="admin-form">
@@ -610,15 +916,52 @@ function App() {
                                         </div>
                                     </>
                                 )}
+
+                                {/* Coupons Tab */}
+                                {adminTab === 'coupons' && (
+                                    <>
+                                        <div className="admin-form">
+                                            <h4 style={{ marginBottom: '15px' }}>🏷️ إضافة كوبون جديد</h4>
+                                            <div className="form-row">
+                                                <div className="form-group"><label>كود الخصم</label><input type="text" value={newCouponCode} onChange={(e) => setNewCouponCode(e.target.value)} placeholder="SALE10" /></div>
+                                                <div className="form-group"><label>قيمة الخصم</label><input type="number" value={newCouponDiscount} onChange={(e) => setNewCouponDiscount(e.target.value)} placeholder="10" /></div>
+                                            </div>
+                                            <div className="form-row">
+                                                <div className="form-group"><label>نوع الخصم</label>
+                                                    <select value={newCouponType} onChange={(e) => setNewCouponType(e.target.value)}>
+                                                        <option value="percent">نسبة مئوية (%)</option>
+                                                        <option value="fixed">قيمة ثابتة (ل.س)</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group"><label>الحد الأدنى للطلب</label><input type="number" value={newCouponMinOrder} onChange={(e) => setNewCouponMinOrder(e.target.value)} placeholder="0" /></div>
+                                            </div>
+                                            <button className="btn-submit" onClick={addCoupon}>إضافة الكوبون</button>
+                                        </div>
+                                        
+                                        <div className="items-list">
+                                            <h4 style={{ marginBottom: '15px' }}>🏷️ الكوبونات الحالية ({coupons.length})</h4>
+                                            {coupons.map(c => (
+                                                <div key={c.code} className="list-item">
+                                                    <div className="list-item-info"><h4>{c.code}</h4><p>{c.type === "percent" ? `${c.discount}%` : formatPrice(c.discount)} • استخدم: {c.uses}/{c.maxUses}</p></div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
                                 
+                                {/* Settings Tab */}
                                 {adminTab === 'settings' && (
                                     <div>
                                         <div className="admin-form">
                                             <h4 style={{ marginBottom: '15px' }}>⚙️ إعدادات المتجر</h4>
                                             <div className="form-group"><label>رقم الواتساب</label><input type="text" value={settings.whatsappNumber} onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })} /></div>
-                                            <div className="form-group"><label>كود الخصم</label><input type="text" value={settings.discountCode} onChange={(e) => setSettings({ ...settings, discountCode: e.target.value.toUpperCase() })} /></div>
-                                            <div className="form-group"><label>نسبة الخصم (%)</label><input type="number" value={settings.discountPercent} onChange={(e) => setSettings({ ...settings, discountPercent: Math.min(90, Math.max(0, parseInt(e.target.value) || 0)) })} /></div>
+                                            <div className="form-group"><label>كود الخصم العام</label><input type="text" value={settings.discountCode} onChange={(e) => setSettings({ ...settings, discountCode: e.target.value.toUpperCase() })} /></div>
+                                            <div className="form-group"><label>نسبة الخصم العام (%)</label><input type="number" value={settings.discountPercent} onChange={(e) => setSettings({ ...settings, discountPercent: Math.min(90, Math.max(0, parseInt(e.target.value) || 0)) })} /></div>
+                                            <div className="form-group"><label>رسوم الشحن (ل.س)</label><input type="number" value={settings.shippingFee} onChange={(e) => setSettings({ ...settings, shippingFee: parseInt(e.target.value) || 0 })} /></div>
+                                            <div className="form-group"><label>الحد الأدنى للشحن المجاني (ل.س)</label><input type="number" value={settings.freeShippingMin} onChange={(e) => setSettings({ ...settings, freeShippingMin: parseInt(e.target.value) || 0 })} /></div>
                                             <div className="form-group"><label>كلمة مرور الإدارة</label><input type="text" value={settings.adminPwd} onChange={(e) => setSettings({ ...settings, adminPwd: e.target.value })} /></div>
+                                            <div className="form-group"><label>توكن البوت</label><input type="text" value={settings.botToken} onChange={(e) => setSettings({ ...settings, botToken: e.target.value })} placeholder="1234567890:ABCdefGHIjkl..." /></div>
+                                            <div className="form-group"><label><input type="checkbox" checked={settings.enableBot} onChange={(e) => setSettings({ ...settings, enableBot: e.target.checked })} /> تفعيل البوت</label></div>
                                         </div>
                                         <div className="info-box">
                                             <strong>🔑 كيفية الدخول للوحة التحكم:</strong><br/>
@@ -628,31 +971,21 @@ function App() {
                                         </div>
                                     </div>
                                 )}
-                                
-                                {adminTab === 'bot' && (
+
+                                {/* Backup Tab */}
+                                {adminTab === 'backup' && (
                                     <div>
                                         <div className="admin-form">
-                                            <h4 style={{ marginBottom: '15px' }}>🤖 إعدادات بوت التليجرام</h4>
-                                            <div className="form-group">
-                                                <label>توكن البوت (Bot Token)</label>
-                                                <input type="text" value={settings.botToken} onChange={(e) => setSettings({ ...settings, botToken: e.target.value })} placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" />
-                                                <p style={{ fontSize: '11px', color: '#888', marginTop: '5px' }}>احصل على التوكن من @BotFather في التليجرام</p>
-                                            </div>
-                                            <div className="form-group">
-                                                <label>اسم المستخدم للبوت</label>
-                                                <input type="text" value={settings.botUsername} onChange={(e) => setSettings({ ...settings, botUsername: e.target.value })} placeholder="@MyShopBot" />
-                                            </div>
-                                            <div className="form-group">
-                                                <label><input type="checkbox" checked={settings.enableBot} onChange={(e) => setSettings({ ...settings, enableBot: e.target.checked })} /> تفعيل البوت</label>
-                                            </div>
+                                            <h4 style={{ marginBottom: '15px' }}>💾 نسخ احتياطي واستعادة</h4>
+                                            <button className="btn-submit" style={{ width: '100%', marginBottom: '15px' }} onClick={exportData}>📥 تصدير البيانات (JSON)</button>
+                                            <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} id="importFile" />
+                                            <button className="btn-submit" style={{ width: '100%', background: 'var(--info)' }} onClick={() => document.getElementById('importFile').click()}>📤 استيراد البيانات</button>
                                         </div>
                                         <div className="info-box">
-                                            <strong>📖 شرح إعداد البوت:</strong><br/><br/>
-                                            1️⃣ اذهب إلى <strong>@BotFather</strong> في التليجرام<br/>
-                                            2️⃣ أرسل <code>/newbot</code> لإنشاء بوت جديد<br/>
-                                            3️⃣ اختر اسم للبوت ثم اسم مستخدم ينتهي بـ <strong>bot</strong><br/>
-                                            4️⃣ بعد الإنشاء، ستحصل على <strong>Token</strong> - انسخه والصقه في الحقل أعلاه<br/>
-                                            5️⃣ ارفع ملف bot.js على Render كما هو موضح
+                                            <strong>💡 ملاحظة:</strong><br/>
+                                            • التصدير يحفظ جميع المنتجات والأقسام والإعدادات<br/>
+                                            • يمكنك استيراد البيانات لاستعادة نسخة احتياطية سابقة<br/>
+                                            • البيانات تحفظ في ملف JSON
                                         </div>
                                     </div>
                                 )}
