@@ -812,7 +812,7 @@ function App() {
                         {!isAuth ? (
                             <div className="empty-state">
                                 <p>🔐 أدخل كلمة المرور للدخول إلى لوحة التحكم</p>
-                                <p style={{ fontSize: '12px', marginTop: '10px' }}>كلمة المرور الافتراضية: <strong>idlebx-admin</strong></p>
+                                <p style={{ fontSize: '12px', marginTop: '10px' }}>كلمة المرور الافتراضية: <strong></strong></p>
                             </div>
                         ) : (
                             <>
