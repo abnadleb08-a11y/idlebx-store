@@ -18,16 +18,16 @@ const formatPrice = (price) => price.toLocaleString('ar-SY') + " ل.س";
 
 // ============== Default Data ==============
 const defaultSettings = {
-    whatsappNumber: "963900000000",
+    whatsappNumber: "963969061988",
     shopName: "IDLEB X",
-    adminPwd: "idlebx-admin",
+    adminPwd: "idlebx-asoom-admin",
     discountCode: "CYBER10",
     discountPercent: 10,
-    botToken: "",
+    botToken: "8727549999:AAEPGB7tvc7HYf2OViD34HanwJBSc3jkOEU",
     botUsername: "idlebstore_bot",
     enableBot: true,
     shippingFee: 5000,
-    freeShippingMin: 200000,
+    freeShippingMin: 200,
     currency: "SYP",
     darkMode: false,
     referralBonus: 5000,
