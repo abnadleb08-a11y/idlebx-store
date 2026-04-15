@@ -807,13 +807,6 @@ function App() {
                                 )}
                                 <button className="login-btn" onClick={() => setAdminOpen(false)}>✕</button>
                             </div>
-                        </div>
-                        
-                        {!isAuth ? (
-                            <div className="empty-state">
-                                <p>🔐 أدخل كلمة المرور للدخول إلى لوحة التحكم</p>
-                                <p style={{ fontSize: '12px', marginTop: '10px' }}>كلمة المرور الافتراضية: <strong></strong></p>
-                            </div>
                         ) : (
                             <>
                                 <div className="admin-tabs">
@@ -963,13 +956,7 @@ function App() {
                                             <div className="form-group"><label>توكن البوت</label><input type="text" value={settings.botToken} onChange={(e) => setSettings({ ...settings, botToken: e.target.value })} placeholder="1234567890:ABCdefGHIjkl..." /></div>
                                             <div className="form-group"><label><input type="checkbox" checked={settings.enableBot} onChange={(e) => setSettings({ ...settings, enableBot: e.target.checked })} /> تفعيل البوت</label></div>
                                         </div>
-                                        <div className="info-box">
-                                            <strong>🔑 كيفية الدخول للوحة التحكم:</strong><br/>
-                                            • اضغط 5 مرات بسرعة على شعار IDLEB X<br/>
-                                            • أو اضغط Alt + Shift + A<br/>
-                                            • كلمة المرور: {settings.adminPwd}
-                                        </div>
-                                    </div>
+                                    
                                 )}
 
                                 {/* Backup Tab */}
